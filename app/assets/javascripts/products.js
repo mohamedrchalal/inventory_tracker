@@ -1,3 +1,5 @@
+//= require angular
+
 "use strict";
 
 (function(){
