@@ -1,15 +1,23 @@
 //=require angular
+//= require angular-resource
 
 "use strict";
 
 (function(){
   angular
-  .module("inventory", [])
+  .module("inventory", ["ngResource"])
   .controller("inventory_controller", InventoryController);
-
-  function InventoryController(){
+  InventoryController.$inject = ["$resource"]
+  function InventoryController($resource){
     var vm = this;
-    vm.data = data;
+    var Product = $resource("/products/:id.json", {}, {
+      update: {method: 'PUT'};
+    });
+    vm.data= Product.query(function(response){
+      vm.data.forEach(function(product){
+        product.cost = parseFloat(product.cost);
+      });
+    });
     vm.sort_data_by = function(name){
       vm.sort_on = name;
       vm.is_descending = !(vm.is_descending);
